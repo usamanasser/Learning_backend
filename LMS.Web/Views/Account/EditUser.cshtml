@@ -1,0 +1,15 @@
+﻿@model LMS.Web.ViewModel.RegisterVm
+
+@{
+    ViewData["Title"] = "EditUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Json.Serialize(@Model).ToString()?.Replace("\"", $"'");
+
+    var isProfile = Json.Serialize(@ViewBag.isProfile).ToString().Replace("\"", $"'");
+
+}
+
+<useredit :currentuser="@user" :isprofile="@isProfile"></useredit>
+
+

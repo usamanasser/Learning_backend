@@ -1,0 +1,10 @@
+
+@font-face {
+    font-family: calbiri;
+    src: url(CALIBRIZ.TTF);
+}
+
+body {
+    background-color: #ffffff !important;
+    font-family: "calbiri";
+}

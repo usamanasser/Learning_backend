@@ -1,0 +1,8 @@
+﻿
+@{
+    ViewData["Title"] = "Quiz";
+    var data = Json.Serialize(@ViewBag.Quiz).ToString().Replace("\"", $"'");
+}
+
+<quiz-attempt :quiz="@data"/>
+

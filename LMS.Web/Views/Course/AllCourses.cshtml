@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewData["Title"] = "All Courses";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    var category = Json.Serialize(@ViewBag.Coursecategorylist).ToString().Replace("\"", $"'");
+    var id = Json.Serialize(@ViewBag.Id).ToString().Replace("\"", $"'");
+
+}
+
+<courses-page :categories="@category" :id="@id" />
+

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Calendar";
+    var data = "";
+    if (@ViewBag.Data != null)
+    {
+        data = Json.Serialize(@ViewBag.Data).ToString().Replace("\"", $"'");
+    }
+
+
+}
+@if (data == "")
+{
+    <calendar :data="''" />
+
+}
+else
+{
+    <calendar :data="@data" />
+}
+
+
+
+
+

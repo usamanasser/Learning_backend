@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewData["Title"] = "Create New Course";
+    var course = Json.Serialize(@ViewBag.Course).ToString().Replace("\"", $"'");
+ 
+}
+
+<coursecreation :course="@course"  />
+

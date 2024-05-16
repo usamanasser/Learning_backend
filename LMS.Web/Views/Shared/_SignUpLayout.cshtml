@@ -1,0 +1,96 @@
+﻿@using LMS.Web.ExtensionMethods
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] Learning Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Learning Management System" name="description" />
+    <meta content="" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.png">
+
+    <link href="~/assets/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+    <script src="~/assets/js/custom.js"></script>
+    <!-- App css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body class="account-body accountbg">
+    <div style="width:100%">
+        <div style="width:100%" class="bg-wh">
+            <div class="container ">
+                <div style="display:flex; justify-content:space-between; align-item:center">
+                    <div>
+                        <a href="/">
+                            <img src="~/website-assets/img/logo/logo.png" class="img-fluid" style="max-width:90px" />
+                        </a>
+                    </div>
+                    <li class="dropdown" style="list-style: none;">
+                        <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="false" aria-expanded="false">
+                            Language
+                            <i class="fas fa-globe"></i>
+
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/Home/SetLanguage?culture=en-US&returnUrl=/Account/SignUp" onclick="changeDir('ltr' , 'en')">
+                                @Html.Translate("English")
+                            </a>
+                            <a class="dropdown-item" href="/Home/SetLanguage?culture=tr-TR&returnUrl=/Account/SignUp" onclick="changeDir('rtl', 'ar')">
+                                @Html.Translate("Arabic")
+                            </a>
+                        </div>
+                    </li>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Log In page -->
+        <div class="container">
+
+            <div class="row vh-100 d-flex justify-content-center">
+                <div class="col-12 align-self-center">
+                    <div class="row" id="focus">
+                        @RenderBody()
+                    </div><!--end row-->
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+        <!-- End Log In page -->
+        <!-- jQuery  -->
+        <style>
+            .dropdown-toggle::after {
+                display: inline-block;
+                margin-left: 0.255em;
+                vertical-align: 0.255em;
+                content: "";
+                border-top: 0.3em solid;
+                border-right: 0.3em solid transparent;
+                border-bottom: 0;
+                border-left: 0.3em solid transparent;
+            }
+
+            .bg-wh {
+                background-color: #ffffff;
+                padding: 10px;
+            }
+        </style>
+        <script src="~/dist/js/app.js"></script>
+        <script src="~/assets/js/jquery.min.js"></script>
+        <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="~/assets/js/waves.js"></script>
+        <script src="~/assets/js/feather.min.js"></script>
+        <script src="~/assets/js/simplebar.min.js"></script>
+
+        @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</body>
+</html>

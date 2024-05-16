@@ -1,0 +1,10 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using LMS.Web.ExtensionMethods
+@{
+    //ViewData["Title"] = "Terms And Conditions";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    var courses = Json.Serialize(@ViewBag.Course).ToString().Replace("\"", $"'");
+}
+
+<home-page :courses="@courses" ></home-page>
+                                               

@@ -1,0 +1,12 @@
+﻿@using LMS.Web.ViewModel
+@model LMS.Web.Models.RoleViewModel
+
+@{
+    ViewData["Title"] = "Create Role";
+    var controllers =Json.Serialize( (List<MvcControllerInfoVm>)ViewData["Controllers"]).ToString()?.Replace("\"",$"'");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<createrole :controller="@controllers"/>

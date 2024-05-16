@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Google";
+    var data = "";
+    if (@ViewBag.Data != null)
+    {
+        data = Json.Serialize(@ViewBag.Data).ToString().Replace("\"", $"'");
+    }
+
+
+}
+@if (data == "")
+{
+    <zoom-admin :data="''" :type="2" />
+
+}
+else
+{
+    <zoom-admin :data="@data" :type="2" />
+}

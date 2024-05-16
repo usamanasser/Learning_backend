@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Zoom";
+    var data = "";
+    if (@ViewBag.Data != null)
+    {
+         data = Json.Serialize(@ViewBag.Data).ToString().Replace("\"", $"'");
+    }
+
+
+}
+@if (data == "")
+{
+    <zoom-admin :data="''" :type="1" />
+
+}
+else
+{
+    <zoom-admin :data="@data" :type="1" />
+}
+
+
+

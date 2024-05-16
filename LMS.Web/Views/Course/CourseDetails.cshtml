@@ -1,0 +1,8 @@
+﻿
+@{
+    ViewData["Title"] = "Course Detail";
+    var data = Json.Serialize(@ViewBag.Coursedetail).ToString().Replace("\"", $"'");
+}
+
+<course-detail :data="@data" />
+

@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = Json.Serialize(@ViewBag.UserList).ToString().Replace("\"", $"'");
+    var currentUser = Json.Serialize(@ViewBag.CurrentUser).ToString().Replace("\"", $"'");
+}
+
+<userview :userlist="@user" :currentuser="@currentUser"></userview>
+

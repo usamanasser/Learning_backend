@@ -1,0 +1,8 @@
+﻿
+@{
+    ViewData["Title"] = "CreateNewCertificate";
+    var certificate = Json.Serialize(@ViewBag.certificate).ToString().Replace("\"", $"'");
+}
+
+<new-certificate :certificate="@certificate" />
+

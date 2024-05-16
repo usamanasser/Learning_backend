@@ -1,0 +1,8 @@
+﻿
+@{
+    ViewData["Title"] = "Trainee Dashboard";
+    var data = Json.Serialize(@ViewBag.Details).ToString().Replace("\"", $"'");
+}
+
+<dashboard :data="@data"/>
+

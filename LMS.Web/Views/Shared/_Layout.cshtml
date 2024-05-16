@@ -1,0 +1,382 @@
+﻿@using LMS.Business.Extensions;
+@using LMS.Web.ExtensionMethods
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Principal;
+@using LMS.Business.Interface
+@using Microsoft.EntityFrameworkCore
+@inject IPrincipal _principal;
+@inject IApplicationDbContext _context;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]  Learning Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Learning Management System" name="description" />
+    <meta content="" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.png">
+    <link href="~/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet">
+
+    <!-- App css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/website-assets/css/Custom.css">
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+    <link href="~/plugins/dropify/css/dropify.min.css" rel="stylesheet">
+    <script src="~/assets/js/custom.js"></script>
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.6/dist/vue-multiselect.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="~/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css" rel="stylesheet" type="text/css" media="screen">
+    <style>
+        .form-control {
+            line-height: 2 !important;
+        }
+
+        .multiselect {
+            opacity: 1 !important;
+        }
+
+        #ar {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body class="dark-sidenav">
+    <div style="width: 100% !important">
+        <!-- Left Sidenav -->
+        <div class="left-sidenav">
+            <!-- LOGO -->
+            <div class="brand">
+                <a href="/" class="logo">
+                    <span>
+                        <img src="~/website-assets/img/logo/Footer-logo.png" alt="logo-small" class="logo-sm">
+                    </span>
+                    @*<span>
+                        <img src="~/website-assets/img/logo/Footer-logo.png" alt="logo-large" class="logo-lg logo-light">
+                        <img src="~/website-assets/img/logo/Footer-logo.png" alt="logo-large" class="logo-lg logo-dark">
+                    </span>*@
+                </a>
+            </div>
+
+
+            @{
+                var role = _principal.Identity.RoleName();
+            }
+            <!--end logo-->
+            <div class="menu-content h-100" data-simplebar>
+                <ul class="metismenu left-sidenav-menu">
+
+                    <li>
+                        @if (role == "Trainee")
+                        {
+                            <a href="/Home/TraineeDashboard"> <i data-feather="home" class="align-self-center menu-icon"></i><span>@Html.Translate("Dashboard")</span></a>
+                        }
+                        @if (role == "Instructor")
+                        {
+                            <a href="/Home/InstructorDashboard"> <i data-feather="home" class="align-self-center menu-icon"></i><span>@Html.Translate("Dashboard")</span></a>
+                        }
+                        @if (role == "Admission admin")
+                        {
+                            <a href="/Home/AdmissionDashboard"> <i data-feather="home" class="align-self-center menu-icon"></i><span>@Html.Translate("Dashboard")</span></a>
+                        }
+                        @if (role == "Admin")
+                        {
+                            <a href="/Home/AdminDashboard"> <i data-feather="home" class="align-self-center menu-icon"></i><span>@Html.Translate("Dashboard")</span></a>
+                        }
+                        @if (role == "Super Admin")
+                        {
+                            <a href="/Home/Dashboard"> <i data-feather="home" class="align-self-center menu-icon"></i><span>@Html.Translate("Dashboard")</span></a>
+                        }
+                    </li>
+
+                    <hr class="hr-dashed hr-menu">
+
+                    @if (role == "Super Admin" || role == "Admin")
+                    {
+                        <li>
+                            <a href="javascript: void(0);"> <i data-feather="layers" class="align-self-center menu-icon"></i><span>@Html.Translate("Users")</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li class="nav-item"><a class="nav-link" href="/Account/SuperAdminList"><i class="ti-control-record"></i>@Html.Translate("SuperAdminList")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Account/AdminList"><i class="ti-control-record"></i>@Html.Translate("AdminList")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Account/AdmissionAdminList"><i class="ti-control-record"></i>@Html.Translate("AdmissionAdminList")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Account/InstructorList"><i class="ti-control-record"></i>@Html.Translate("InstructorList")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Account/TraineeList"><i class="ti-control-record"></i>@Html.Translate("TraineeList")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Account/TraineeForApproval"><i class="ti-control-record"></i> @Html.Translate("TraineeForApprovalList")</a></li>
+                              
+                            </ul>
+                        </li>
+                    }
+
+
+
+                    <li>
+                        <a href="javascript: void(0);"> <i data-feather="lock" class="align-self-center menu-icon"></i><span>@Html.Translate("CourseManagement")</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            @if (role == "Trainee")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Course/TraineeCourses"><i class="ti-control-record"></i>@Html.Translate("MyCourses")</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="/Course/MyAssignment"><i class="ti-control-record"></i>@Html.Translate("MyAssignment")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Course/Quizzes"><i class="ti-control-record"></i>@Html.Translate("Quizzes")</a></li>
+                                <li><a class="nav-link" href="/Course/Calendar"><i class="ti-control-record"></i> @Html.Translate("Calendar")</a></li>
+                                <li><a class="nav-link" href="/QandA"><i class="ti-control-record"></i> @Html.Translate("QuestionsAnswers")</a></li>
+                            }
+                            @if (role == "Super Admin" || role == "Admin" || role == "Instructor")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Course/MyCourses"><i class="ti-control-record"></i> @Html.Translate("Courses")</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="/Course/CourseAssignment"><i class="ti-control-record"></i>@Html.Translate("CourseAssignment")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Bundle/Bundle"><i class="ti-control-record"></i>@Html.Translate("Programs")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Course/QuestionAnswer"><i class="ti-control-record"></i>  @Html.Translate("CourseFAQ's")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Course/ProgramQuestionAnswer"><i class="ti-control-record"></i>@Html.Translate("ProgramFAQ's") </a></li>
+                                <li><a class="nav-link" href="/QandA"><i class="ti-control-record"></i> @Html.Translate("QuestionsAnswers")</a></li>
+                                <li><a class="nav-link" href="/Course/CreateNewCertificate"><i class="ti-control-record"></i> Create Certificate</a></li>
+                                <li><a class="nav-link" href="/home/Lessons"><i class="ti-control-record"></i> Lessons</a></li>
+                                <li><a class="nav-link" href="/home/InstructorViewQuiz"><i class="ti-control-record"></i> Quizzes</a></li>
+                                <li><a class="nav-link" href="/Course/Certificate"><i class="ti-control-record"></i> Certificate</a></li>
+                               
+                            }
+                            <li class="nav-item"><a class="nav-link" href="/Announcement"><i class="ti-control-record"></i>@Html.Translate("Announcement")</a></li>
+
+                            @if (role == "Super Admin" || role == "Admin" || role == "Admission admin")
+                            {
+                                <li class="nav-item"><a class="nav-link" href="/Course/PrivateCourses"><i class="ti-control-record"></i>@Html.Translate("AssignPrivateCourse")</a></li>
+
+                            }
+                            @if (role == "Instructor")
+                            {
+                                <li class="nav-item"><a class="nav-link" href="/home/Manualattendance"><i class="ti-control-record"></i>  @Html.Translate("ManualAttandance") </a></li>
+                                
+
+                            }
+                        </ul>
+                    </li>
+
+                    @if (role == "Super Admin" || role == "Admin")
+                    {
+                        <li>
+                            <a href="javascript: void(0);"> <i data-feather="lock" class="align-self-center menu-icon"></i><span>@Html.Translate("SetUpForm")</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li class="nav-item"><a class="nav-link" href="/CourseCategory"><i class="ti-control-record"></i>@Html.Translate("CourseCategories")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Tag"><i class="ti-control-record"></i>@Html.Translate("Tags")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Setup/Cities"><i class="ti-control-record"></i>@Html.Translate("Cities")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Setup/Qualification"><i class="ti-control-record"></i>@Html.Translate("Qualification")</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Setup/Specialties"><i class="ti-control-record"></i>@Html.Translate("Specialties")</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/ContactUs/List"> <i data-feather="lock" class="align-self-center menu-icon"></i><span>@Html.Translate("ContactFrom")</span></a>
+                        </li>
+                       
+                    }
+                    @if (role == "Super Admin" || role == "Admin" || role == "Instructor")
+                    {
+                        <li>
+                            <a href="javascript: void(0);"> <i data-feather="layers" class="align-self-center menu-icon"></i><span>Integration</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li class="nav-item"><a class="nav-link" href="/Integration/Zoom"><i class="ti-control-record"></i> Zoom</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Integration/Google"><i class="ti-control-record"></i> Google</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Integration/Teams"><i class="ti-control-record"></i> Teams</a></li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (role == "Super Admin" || role == "Admin")
+                    {
+                        <li>
+                            <a href="javascript: void(0);"> <i data-feather="layers" class="align-self-center menu-icon"></i><span>Reports</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li class="nav-item"><a class="nav-link" href="/Report"><i class="ti-control-record"></i> Trainee Report</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/Report/TraineeEnrollmentReport"><i class="ti-control-record"></i> Student Enrollment Report</a></li>
+                            </ul>
+                        </li>
+                    }
+
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- end left-sidenav-->
+
+        <div class="page-wrapper">
+            <!-- Top Bar Start -->
+            <div class="topbar">
+                <!-- Navbar -->
+                
+
+                <nav class="navbar-custom">
+                    <ul class="list-unstyled topbar-nav float-end mb-0">
+                        <li class="dropdown hide-phone">
+                            <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="false" aria-expanded="false">
+                                <i data-feather="search" class="topbar-icon"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end dropdown-lg p-0">
+                                <!-- Top Search Bar -->
+                                <div class="app-search-topbar">
+                                    <form action="#" method="get">
+                                        <button type="submit"><i class="ti-search"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="dropdown notification-list">
+                            <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="false" aria-expanded="false" id="mark-read-btn">
+                                <i data-feather="bell" class="align-self-center topbar-icon"></i>
+                               
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
+
+                                <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                                </h6>
+                                <div class="notification-menu" data-simplebar>
+                                   
+                                    
+                                </div>
+                                <!-- All-->
+                                <a href="javascript:void(0);" class="dropdown-item text-center text-primary"><i class="fi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i class="fas fa-globe"></i>
+
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" id="languageLink" href="javascript:void(0)" onclick="changeDir('ltr', 'en')">
+
+                                </a>
+                                <a class="dropdown-item" id="languageLinkArabic" href="javascript:void(0)" onclick="changeDir('rtl', 'ar')">
+
+                                </a>
+
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="false" aria-expanded="false">
+                                <span class="ms-1 nav-user-name hidden-sm">@User.Identity?.Name</span>
+                                @{
+                                    var userImagePath = _principal.Identity.UserImagePath();
+                                }
+                                @if (!string.IsNullOrEmpty(userImagePath))
+                                {
+                                    <img src="@userImagePath" alt="profile-user" class="rounded-circle thumb-xs" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
+                                }
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="/Profile"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> </a>
+                                <a class="dropdown-item" href="#"><i data-feather="settings" class="align-self-center icon-xs icon-dual me-1"></i> </a>
+                                <div class="dropdown-divider mb-0"></div>
+                                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                                    <i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> 
+                                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+                                    </form>
+                                </a>
+                            </div>
+                        </li>
+                    </ul><!--end topbar-nav-->
+
+                    <ul class="list-unstyled topbar-nav mb-0">
+                        <li>
+                            <button class="nav-link button-menu-mobile">
+                                <i data-feather="menu" class="align-self-center topbar-icon"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- end navbar-->
+            </div>
+            <!-- Top Bar End -->
+            <!-- Page Content-->
+            <!-- end page content -->
+        </div>
+
+        <div class="page-wrapper" id="focus">
+            <div class="page-content">
+                @RenderBody()
+            </div>
+
+        </div>
+
+        <!-- end page-wrapper -->
+
+    </div>
+
+    <script src="~/dist/js/app.js"></script>
+    <!-- jQuery  -->
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/metismenu.min.js"></script>
+    <script src="~/assets/js/waves.js"></script>
+    <script src="~/assets/js/feather.min.js"></script>
+    <script src="~/assets/js/simplebar.min.js"></script>
+    <script src="~/assets/js/moment.js"></script>
+    <script src="~/plugins/dropify/js/dropify.min.js"></script>
+    <script src="~/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/assets/pages/jquery.form-upload.init.js"></script>
+
+    <!-- Responsive-table-->
+    <script src="~/plugins/RWD-Table-Patterns/dist/js/rwd-table.min.js"></script>
+    <script src="~/assets/pages/jquery.responsive-table.init.js"></script>
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+@*<script src="https://unpkg.com/vue-i18n@8.24.4/dist/vue-i18n.js"></script>*@
+
+    <script>
+        $(document).on('click', '.notification-item', function () {
+            $(this).toggleClass('read'); // Toggle read/unread UI style
+
+            // Update the notification count
+            var newCount = parseInt($('.noti-icon-badge').text()) - 1;
+            $('.noti-icon-badge').text(newCount);
+
+            // Hide the notification count badge if there are no unread notifications
+            if (newCount === 0) {
+                $('.noti-icon-badge').addClass('d-none');
+            }
+        });
+
+        $(document).on('click', '#mark-read-btn', function () {
+            var ids = $('.notification-item').map(function () {
+                return $(this).data('notification-id');
+            }).get();
+
+            $.ajax({
+                url: '/Notification/MarkNotificationAsRead',
+                type: 'POST',
+                data: JSON.stringify(ids), // Send the IDs as a JSON string
+                contentType: 'application/json',
+                success: function () {
+                    $('.notification-item.read').removeClass('read'); // Clear read notification style
+
+                    // Hide the notification count badge
+                    $('.noti-icon-badge').addClass('d-none');
+                }
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
